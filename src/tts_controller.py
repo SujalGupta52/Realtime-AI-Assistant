@@ -1,22 +1,22 @@
-from TTS.api import TTS
+import wave
+from piper.voice import PiperVoice
 
 
 class TTS_controller:
-    def __init__(self, source_voice):
-        self.tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to("cuda")
-        self.source_voice = source_voice
+    def __init__(self):
+        self.voice = PiperVoice.load(
+            "/home/sujal/repos/untitled-ai-project/models/en_US-lessac-medium.onnx",
+            "/home/sujal/repos/untitled-ai-project/models/en_US-lessac-medium.onnx.json",
+            use_cuda=False,
+        )
 
     def generate(self, text, output_path):
-        self.tts.tts_to_file(
-            text=text,
-            file_path=output_path,
-            speaker_wav=self.source_voice,
-            language="en",
-        )
+        wav_file = wave.open(output_path, "w")
+        audio = self.voice.synthesize(text, wav_file)
 
 
 if __name__ == "__main__":
-    tts = TTS_controller("sample_audio/White_Knights_Aleesha_Bake.mp3")
+    tts = TTS_controller()
     import time
 
     start_time = time.time()
