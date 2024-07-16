@@ -1,17 +1,24 @@
 from llama_cpp import Llama
+import json
 
-llm = Llama(
-    model_path="models/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf",
-    n_gpu_layers=-1,  # Uncomment to use GPU acceleration
-    verbose=True,
-    flash_attn=True,
-    # seed=1337, # Uncomment to set a specific seed
-    # n_ctx=2048, # Uncomment to increase the context window
-)
-output = []
-for i in range(10):
-    output.append(
-        llm.create_chat_completion(
+
+class LLM_controller:
+    def __init__(
+        self,
+        model_path,
+        verbose=True,
+        temperature=0.3,
+    ):
+        self.temperature = temperature
+        self.llm = Llama(
+            model_path=model_path,
+            n_gpu_layers=-1,
+            verbose=verbose,
+            flash_attn=True,
+        )
+
+    def generate(self, message):
+        return self.llm.create_chat_completion(
             messages=[
                 {
                     "role": "system",
@@ -23,20 +30,45 @@ for i in range(10):
 
                         Respond with no other text but a JSON document like this example JSON document:
                         {
-                        "intent": <navigation | general_query | mark_location>,
+                        "intent": <navigation | general_query | get_location>,
                         "to": <only in case of navigation intent>,
                         "from":  <only in case of navigation intent>,
-                        "answer": <Reply as a helpful assistant, keep in very short>,
-                        "places_required": <Array of locations from above answers, only in case of mark_location or general_query>,
+                        "answer": <Reply as a helpful assistant, keep in very short and to the point>,
+                        "places_required": <Array of locations user want from above answers, only in case of get_location or general_query>,
                         }
                         """,
                 },
                 {
                     "role": "user",
-                    "content": "Input Data: Hey, kolkata se howrah station kaise jaye",
+                    "content": f"Input Data: {message}",
                 },
             ],
-            temperature=0.7,
+            temperature=self.temperature,
         )
+
+    def parse_json_from_llm(self, message_with_json):
+        str = message_with_json.replace("\n", "")
+        start_idx = -1
+        end_idx = -1
+        for i in range(len(str)):
+            if str[i] == "{":
+                start_idx = i
+                break
+        for i in range(len(str) - 1, -1, -1):
+            if str[i] == "}":
+                end_idx = i
+                break
+        json_output = str[start_idx : end_idx + 1]
+        return json.loads(json_output)
+
+
+if __name__ == "__main__":
+    llm = LLM_controller(
+        model_path="models/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf",
+        verbose=False,
+        temperature=0.1,
     )
-    print(output[-1])
+    out = llm.generate("Generate a itenary for my banglore trip")["choices"][0][
+        "message"
+    ]["content"]
+    print(llm.parse_json_from_llm(out))
