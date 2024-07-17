@@ -17,7 +17,7 @@ class STT_controller:
             lang_codes=lang_codes,
             tasks=tasks,
             initial_prompts=initial_prompts,
-            batch_size=128,
+            batch_size=64,
         )
         final_output = ""
         for chunks in out[0]:
