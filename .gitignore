@@ -1,3 +1,5 @@
 env
-models
 .venv
+temp/*
+models/*
+*/__pycache__
