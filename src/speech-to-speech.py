@@ -11,11 +11,13 @@ class Model_handler:
             model_path="models/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf", verbose=False
         )
         self.tts = TTS_controller()
+        self.id = 0
 
     def generate(self, speech_file):
         stt_output = self.stt.generate(speech_file)
         llm_output = self.llm.generate(stt_output)
-        self.tts.generate(llm_output["answer"], "temp/output.wav")
+        self.tts.generate(llm_output["answer"], f"temp/output{self.id}.wav")
+        self.id = self.id + 1
         return llm_output
 
 
