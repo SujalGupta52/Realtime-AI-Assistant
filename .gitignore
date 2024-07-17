@@ -2,4 +2,4 @@ env
 .venv
 temp/*
 models/*
-*/__pycache__
+server/utils/__pycache__
