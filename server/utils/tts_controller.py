@@ -6,8 +6,8 @@ import time
 class TTS_controller:
     def __init__(self):
         self.voice = PiperVoice.load(
-            "/home/sujal/repos/untitled-ai-project/models/en_US-lessac-medium.onnx",
-            "/home/sujal/repos/untitled-ai-project/models/en_US-lessac-medium.onnx.json",
+            "models/en_US-lessac-medium.onnx",
+            "models/en_US-lessac-medium.onnx.json",
         )
 
     def generate(self, text, output_path):

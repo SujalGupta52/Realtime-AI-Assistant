@@ -28,4 +28,4 @@ class STT_controller:
 
 if __name__ == "__main__":
     stt = STT_controller()
-    print(stt.generate("sample_audio/output.wav"))
+    print(stt.generate("sample_audio/White_Knights_Aleesha_Bake.mp3"))

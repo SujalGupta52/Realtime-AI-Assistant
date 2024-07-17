@@ -1,6 +1,6 @@
-from llm_controller import LLM_controller
-from stt_controller import STT_controller
-from tts_controller import TTS_controller
+from utils.llm_controller import LLM_controller
+from utils.stt_controller import STT_controller
+from utils.tts_controller import TTS_controller
 import time
 
 
@@ -13,10 +13,10 @@ class Model_handler:
         self.tts = TTS_controller()
         self.id = 0
 
-    def generate(self, speech_file):
-        stt_output = self.stt.generate(speech_file)
+    def generate(self, input_file, output_dir):
+        stt_output = self.stt.generate(input_file)
         llm_output = self.llm.generate(stt_output)
-        self.tts.generate(llm_output["answer"], f"temp/output{self.id}.wav")
+        self.tts.generate(llm_output["answer"], output_dir + "output.wav")
         self.id = self.id + 1
         return llm_output
 
