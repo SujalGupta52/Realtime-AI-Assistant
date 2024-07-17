@@ -8,7 +8,7 @@ class STT_controller:
         )
 
     def generate(self, file):  # Takes file path
-        lang_codes = ["en", "hi"]
+        lang_codes = ["en"]
         tasks = ["transcribe"]
         initial_prompts = [None]
         files = [file]
@@ -17,11 +17,12 @@ class STT_controller:
             lang_codes=lang_codes,
             tasks=tasks,
             initial_prompts=initial_prompts,
-            batch_size=64,
+            batch_size=128,
         )
         final_output = ""
         for chunks in out[0]:
             final_output += chunks["text"]
+        print(final_output)
         return final_output
 
 

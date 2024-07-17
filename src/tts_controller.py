@@ -1,5 +1,6 @@
 import wave
 from piper.voice import PiperVoice
+import time
 
 
 class TTS_controller:
@@ -16,14 +17,14 @@ class TTS_controller:
 
 
 if __name__ == "__main__":
-    tts = TTS_controller()
-    import time
-
+    # TODO: Crashes if try to generate from same instance twice, creating a new instance take 1s extra
     start_time = time.time()
+    tts = TTS_controller()
+
     print(
         tts.generate(
-            "Hello World, this is a example of a real time chatbot",
-            "sample_audio/output.wav",
+            "Please generate a itenary for my kolkata trip  ",
+            "sample_audio/sample_command.wav",
         )
     )
     print("--- %s seconds ---" % (time.time() - start_time))
