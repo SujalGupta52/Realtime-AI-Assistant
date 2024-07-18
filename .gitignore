@@ -4,4 +4,4 @@ temp/*
 models/*
 server/utils/__pycache__
 server/static/generated/*
-server/static/generated/*
+server/static/received/*

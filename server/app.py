@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from utils.main import Model_handler
-import os
+import os, time
 
 
 app = Flask(__name__, static_url_path="", static_folder="static")
@@ -16,6 +16,7 @@ def index():
             input_file="server/static/received/output.ogg",
             output_dir="server/static/generated/",
         )
+        time.sleep(4)
         return "successful"
     else:
         return render_template("index.html")

@@ -46,9 +46,8 @@ class LLM_controller:
             ],
             temperature=self.temperature,
         )["choices"][0]["message"]["content"]
-        result = self.parse_json_from_llm(out)
-        print(result)
-        return result
+        print(out)
+        return out
 
     def parse_json_from_llm(self, message_with_json):
         str = message_with_json.replace("\n", "")
