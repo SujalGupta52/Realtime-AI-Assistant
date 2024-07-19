@@ -23,8 +23,8 @@ gUMbtn.onclick = (e) => {
       },
       audio: {
         tag: "audio",
-        type: "audio/ogg",
-        ext: ".ogg",
+        type: "audio/wav",
+        ext: ".wav",
         gUM: { audio: true },
       },
     };
@@ -73,7 +73,7 @@ function makeLink() {
   li.appendChild(mt);
   li.appendChild(hf);
   ul.appendChild(li);
-  const file = new File([blob], "output.ogg", {
+  const file = new File([blob], `${counter++}${media.ext}`, {
     type: media.type,
   });
   const formData = new FormData();

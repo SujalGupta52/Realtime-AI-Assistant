@@ -13,10 +13,10 @@ def index():
         f = request.files["file"]
         f.save(os.path.join("./server/static/received", f.filename))
         model.generate(
-            input_file="server/static/received/output.ogg",
+            input_file=f"server/static/received/{f.filename}",
             output_dir="server/static/generated/",
         )
-        time.sleep(4)
+        time.sleep(2)
         return "successful"
     else:
         return render_template("index.html")
