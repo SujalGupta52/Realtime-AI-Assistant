@@ -27,7 +27,7 @@ A real-time communication AI system that integrates speech-to-text, natural lang
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     pip install -r requirements.txt
     ```
-4. Download `Meta-Llama-3-8B-Instruct.Q4_K_M.gguf` from huggingface and add it to the `models` folder
+4. Download `Meta-Llama-3-8B-Instruct.Q4_K_M.gguf` from huggingface and add it to the `./models` folder 
 5. Run `app.py`
 
 ## TODO
