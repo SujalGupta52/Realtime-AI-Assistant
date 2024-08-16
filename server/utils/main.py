@@ -10,28 +10,26 @@ class Model_handler:
         self.llm = LLM_controller(
             model_path="models/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf", verbose=False
         )
-        self.tts = TTS_controller()
+        # self.tts = TTS_controller()
         self.id = 0
 
     def generate(self, input_file, output_dir):
         stt_output = self.stt.generate(input_file)
         llm_output = self.llm.generate(stt_output)
-        self.tts.generate(
-            self.llm.parse_json_from_llm(llm_output)["answer"],
-            output_dir + "output.wav",
-        )
+        output_file_name = f"output{int(time.time())}.wav"
+        # self.tts.generate(llm_output, output_dir + output_file_name)
         self.id = self.id + 1
-        return llm_output
+        return llm_output, output_dir + output_file_name
 
 
 if __name__ == "__main__":
     model = Model_handler()
     start = time.time()
-    model.generate("sample_audio/test.wav", "server/static/generated/")
+    model.generate("sample_audio/sample_command.wav", "server/static/generated/")
     print("--- %s seconds ---" % (time.time() - start))
     start = time.time()
-    model.generate("sample_audio/test.wav", "server/static/generated/")
+    model.generate("sample_audio/sample_command.wav", "server/static/generated/")
     print("--- %s seconds ---" % (time.time() - start))
     start = time.time()
-    model.generate("sample_audio/test.wav", "server/static/generated/")
+    model.generate("sample_audio/sample_command.wav", "server/static/generated/")
     print("--- %s seconds ---" % (time.time() - start))
