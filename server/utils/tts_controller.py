@@ -19,7 +19,7 @@ if __name__ == "__main__":
     start_time = time.time()
     tts = TTS_controller()
     tts.generate(
-        "Please generate a itenary for my kolkata trip  ",
+        "What is a LLM?",
         "sample_audio/sample_command.wav",
     )
     print("--- %s seconds ---" % (time.time() - start_time))

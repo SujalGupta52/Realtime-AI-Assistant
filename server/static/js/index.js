@@ -1,78 +1,99 @@
 "use strict";
+function makeCunksOfText(text) {
+  const maxLength = 190;
+  let speechChunks = [];
+
+  // Split the text into chunks of maximum length maxLength without breaking words
+  while (text.length > 0) {
+    if (text.length <= maxLength) {
+      speechChunks.push(text);
+      break;
+    }
+
+    let chunk = text.substring(0, maxLength + 1);
+
+    let lastSpaceIndex = chunk.lastIndexOf(" ");
+    if (lastSpaceIndex !== -1) {
+      speechChunks.push(text.substring(0, lastSpaceIndex));
+      text = text.substring(lastSpaceIndex + 1);
+    } else {
+      // If there are no spaces in the chunk, split at the maxLength
+      speechChunks.push(text.substring(0, maxLength));
+      text = text.substring(maxLength);
+    }
+  }
+
+  return speechChunks;
+}
+
+async function speakText(text) {
+  const speechChunks = makeCunksOfText(text);
+  for (let i = 0; i < speechChunks.length; i++) {
+    await new Promise((resolve, reject) => {
+      window.speechSynthesis.cancel();
+      let speech = new SpeechSynthesisUtterance(speechChunks[i]);
+      speech.rate = 1;
+      speech.lang = "hi-IN";
+      window.speechSynthesis.speak(speech);
+      speech.onend = () => {
+        resolve();
+      };
+      speech.onerror = (error) => {
+        resolve();
+      };
+    });
+  }
+}
+
+async function say(text) {
+  await speakText(text);
+}
 
 let log = console.log.bind(console),
   id = (val) => document.getElementById(val),
-  ul = id("ul"),
-  gUMbtn = id("gUMbtn"),
-  start = id("start"),
-  stop = id("stop"),
   stream,
   recorder,
   counter = 1,
   chunks,
+  alreadyKeyDown = false,
   media;
 
-gUMbtn.onclick = (e) => {
-  let mv = id("mediaVideo"),
-    mediaOptions = {
-      video: {
-        tag: "video",
-        type: "video/webm",
-        ext: ".mp4",
-        gUM: { video: true, audio: true },
-      },
-      audio: {
-        tag: "audio",
-        type: "audio/wav",
-        ext: ".wav",
-        gUM: { audio: true },
-      },
-    };
-  media = mv.checked ? mediaOptions.video : mediaOptions.audio;
+window.onload = (e) => {
+  media = {
+    tag: "audio",
+    type: "audio/wav",
+    ext: ".wav",
+    gUM: { audio: true },
+  };
   navigator.mediaDevices
     .getUserMedia(media.gUM)
     .then((_stream) => {
       stream = _stream;
-      id("gUMArea").style.display = "none";
-      id("btns").style.display = "inherit";
-      start.removeAttribute("disabled");
       recorder = new MediaRecorder(stream);
       recorder.ondataavailable = (e) => {
         chunks.push(e.data);
         if (recorder.state == "inactive") makeLink();
       };
-      log("got media successfully");
     })
     .catch(log);
 };
 
-start.onclick = (e) => {
-  start.disabled = true;
-  stop.removeAttribute("disabled");
-  chunks = [];
-  recorder.start();
+window.onkeydown = (e) => {
+  window.speechSynthesis.cancel();
+  if (e.code === "Space" && !alreadyKeyDown) {
+    alreadyKeyDown = true;
+    chunks = [];
+    recorder.start();
+  }
 };
 
-stop.onclick = (e) => {
-  stop.disabled = true;
+window.onkeyup = (e) => {
+  alreadyKeyDown = false;
   recorder.stop();
-  start.removeAttribute("disabled");
 };
 
-function makeLink() {
-  let blob = new Blob(chunks, { type: media.type }),
-    url = URL.createObjectURL(blob),
-    li = document.createElement("li"),
-    mt = document.createElement(media.tag),
-    hf = document.createElement("a");
-  mt.controls = true;
-  mt.src = url;
-  hf.href = url;
-  hf.download = `${counter++}${media.ext}`;
-  hf.innerHTML = `donwload ${hf.download}`;
-  li.appendChild(mt);
-  li.appendChild(hf);
-  ul.appendChild(li);
+async function makeLink() {
+  let blob = new Blob(chunks, { type: media.type });
   const file = new File([blob], `${counter++}${media.ext}`, {
     type: media.type,
   });
@@ -84,9 +105,11 @@ function makeLink() {
     body: formData,
   };
 
-  fetch("/", options).then(() => {
-    const audio = document.getElementById("myAudio");
-    audio.src = "/generated/output.wav";
-    audio.play();
-  });
+  const res = await fetch("/", options);
+  const answer = await res.text();
+  console.log(answer);
+  say(answer);
+  // const audio = document.getElementById("myAudio");
+  // audio.src = `/generated/${file_path[file_path.length - 1]}`;
+  // audio.play();
 }
