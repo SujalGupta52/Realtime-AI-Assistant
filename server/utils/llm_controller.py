@@ -36,7 +36,7 @@ class LLM_controller:
                     #     "places_required": <Array of locations user want from the query, make sure to mention relevant places, only in case of get_location or general_query>,
                     #     }
                     #     """,
-                    "content": """You are a very enthusiastic voice assistant that answer users question as throughly as you can in around 30-50 words. Prefer short phrases to not bore the user. Be aware that you are just a voice assistant and user cant see your text output so rather than giving codes etc, try to answer in explanation""",
+                    "content": """You are a very enthusiastic voice assistant that answer users question as throughly as you can in around 30-50 words. Prefer short phrases to not bore the user. Be aware that you are just a voice assistant and user cant see your text output so rather than giving codes for programming questions etc, answer by explaning the answer""",
                 },
                 {
                     "role": "user",
