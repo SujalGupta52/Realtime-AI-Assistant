@@ -50,13 +50,14 @@ async function say(text) {
 }
 
 let log = console.log.bind(console),
-  id = (val) => document.getElementById(val),
   stream,
   recorder,
   counter = 1,
   chunks,
   alreadyKeyDown = false,
-  media;
+  media,
+  speechIndicator = document.querySelector(".speak-indicator"),
+  answerContainer = document.querySelector(".answer");
 
 window.onload = (e) => {
   media = {
@@ -81,6 +82,7 @@ window.onload = (e) => {
 window.onkeydown = (e) => {
   window.speechSynthesis.cancel();
   if (e.code === "Space" && !alreadyKeyDown) {
+    speechIndicator.classList.toggle("speaking");
     alreadyKeyDown = true;
     chunks = [];
     recorder.start();
@@ -88,6 +90,7 @@ window.onkeydown = (e) => {
 };
 
 window.onkeyup = (e) => {
+  speechIndicator.classList.toggle("speaking");
   alreadyKeyDown = false;
   recorder.stop();
 };
@@ -104,12 +107,27 @@ async function makeLink() {
     method: "POST",
     body: formData,
   };
-
-  const res = await fetch("/", options);
-  const answer = await res.text();
-  console.log(answer);
-  say(answer);
+  try {
+    const res = await fetch("/", options);
+    const answer = await res.text();
+    answerContainer.textContent = answer;
+    say(answer);
+  } catch (e) {
+    log(e);
+  }
   // const audio = document.getElementById("myAudio");
   // audio.src = `/generated/${file_path[file_path.length - 1]}`;
   // audio.play();
 }
+
+setInterval(function () {
+  if (window.speechSynthesis.speaking) {
+    speechIndicator.classList.add("ai");
+  }
+}, 100);
+
+setInterval(function () {
+  if (!window.speechSynthesis.speaking) {
+    speechIndicator.classList.remove("ai");
+  }
+}, 100);

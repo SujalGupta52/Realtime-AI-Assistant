@@ -1,17 +1,68 @@
-button {
-  margin: 10px 5px;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-li {
-  margin: 10px;
+
+.main-container {
+  width: 60vh;
+  height: 60vh;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  border: 1px solid black;
+  gap: 1rem;
+  font-family: monospace;
 }
-body {
-  width: 90%;
-  max-width: 960px;
-  margin: 0px auto;
+
+p {
+  color: grey;
 }
-#btns {
-  display: none;
+
+.answer {
+  background-color: azure;
+  width: 80%;
+  height: 50%;
+  padding: 1rem;
+  box-shadow: inset black 0px 0px 2px;
 }
-h1 {
-  margin: 100px;
+.speak-indicator {
+  border: 1px solid blue;
+  background-color: rgb(7, 137, 181);
+  height: 30px;
+  width: 30px;
+  border-radius: 20px;
+  animation: pulse 3s infinite;
+}
+
+.speaking {
+  background-color: rgb(6, 249, 83);
+  animation: pulse 1s infinite;
+}
+
+.ai {
+  background-color: rgb(255, 116, 41);
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
