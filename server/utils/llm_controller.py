@@ -22,22 +22,21 @@ class LLM_controller:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a very helpful tour guide, fluent in English and JSON.
-                        Your task is to parse user intent and list of locations user need.
-                        Pretend you are connected to a map and can control it and mark location according to user query, answer as such, but DONT GIVE ANY DIRECTION TO THE USER, GIVE GENERIC ANSWER like "I marked it on your map" and  "I marked the route", be creative
-
-                        Rules:
-                        - leave unknown fields blank
-
-                        Respond with no other text but a JSON document exactly like this example JSON document:
-                        {
-                        "intent": <navigation | general_query | get_location>,
-                        "to": <only in case of navigation intent>,
-                        "from":  <only in case of navigation intent>,
-                        "answer": <Required, Give a detailed answer under 60 words>,
-                        "places_required": <Array of locations user want from the query, make sure to mention relevant places, only in case of get_location or general_query>,
-                        }
-                        """,
+                    # "content": """You are a very helpful tour guide, fluent in English and JSON.
+                    #     Your task is to parse user intent and list of locations user need.
+                    #     Pretend you are connected to a map and can control it and mark location according to user query, answer as such, but DONT GIVE ANY DIRECTION TO THE USER, GIVE GENERIC ANSWER like "I marked it on your map" and  "I marked the route", be creative
+                    #     Rules:
+                    #     - leave unknown fields blank
+                    #     Respond with no other text but a JSON document exactly like this example JSON document:
+                    #     {
+                    #     "intent": <navigation | general_query | get_location>,
+                    #     "to": <only in case of navigation intent>,
+                    #     "from":  <only in case of navigation intent>,
+                    #     "answer": <Required, Give a detailed answer under 60 words>,
+                    #     "places_required": <Array of locations user want from the query, make sure to mention relevant places, only in case of get_location or general_query>,
+                    #     }
+                    #     """,
+                    "content": """You are a very enthusiastic voice assistant that answer users question as throughly as you can in around 30-50 words. Prefer short phrases to not bore the user. Be aware that you are just a voice assistant and user cant see your text output so rather than giving codes etc, try to answer in explanation""",
                 },
                 {
                     "role": "user",
