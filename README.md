@@ -31,9 +31,9 @@ A real-time communication AI system that integrates speech-to-text, natural lang
 5. Run `app.py`
 
 ## TODO
-- [ ] Add feature remeber context
+- [ ] Add feature to remember context
 - [ ] Reduce latency further
-- [ ] Fix some bugs
+- [ ] Fix bugs and ui issues
 
 ## Contributing
 Contributions are welcome! Feel free to submit issues or pull requests to improve the project.
